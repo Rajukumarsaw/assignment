@@ -131,5 +131,3 @@ A basic Learning Management System (LMS) backend built with Node.js, Express, an
 - Rate limiting and input validation are enabled for security.
 
 ---
-
-Feel free to extend with lesson/quiz CRUD, user management, or more advanced features as needed.
