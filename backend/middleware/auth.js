@@ -14,9 +14,18 @@ const auth = async (req, res, next) => {
   }
 };
 
-const admin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') return next();
-  res.status(403).json({ message: 'Admin access required' });
+const admin = async (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secretkey');
+        console.log("decoded: ", decoded);
+        const user = await User.findById(decoded.id).select('-password');
+        console.log(user);
+        if (user && user.role === 'admin') return next();
+        res.status(403).json({ message: 'Admin access required' });
+    } catch (err) {
+        res.status(401).json({ message: 'Token is not valid' });
+    }
 };
 
 module.exports = { auth, admin };
